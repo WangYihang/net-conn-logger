@@ -18,8 +18,16 @@ Let's create a simple HTTP server that logs all connection events (`Accept`, `Re
 ```go
 package main
 
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+
+	"github.com/WangYihang/go-net-conn-logger/pkg/listener"
+)
+
 func main() {
-    // Create a new listener
+	// Create a new listener
 	l, err := listener.NewListener(":8080")
 	if err != nil {
 		panic(err)
@@ -33,11 +41,10 @@ func main() {
 		}
 	}()
 
-    // Start server with the listener
-    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        w.Write([]byte("Hello, World!"))
-    })
-    http.Serve(l, nil)
+	// Start server with the listener
+	http.Serve(l, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Hello, World!"))
+	}))
 }
 ```
 
