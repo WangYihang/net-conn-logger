@@ -33,9 +33,9 @@ func (l *LogEntry) MarshalJSON() ([]byte, error) {
 	bytesRead := []byte{}
 	for _, event := range l.events {
 		switch event.Type() {
-		case WRITE:
+		case Write:
 			bytesWritten = append(bytesWritten, event.payload...)
-		case READ:
+		case Read:
 			bytesRead = append(bytesRead, event.payload...)
 		}
 	}

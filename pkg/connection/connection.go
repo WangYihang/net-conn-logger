@@ -30,7 +30,7 @@ func NewConn(conn net.Conn, opts ...LoggingConnOption) *LoggingConn {
 			c.logEntry.AddEvent(event)
 		}
 	}()
-	c.eventChan <- model.NewEvent(model.ACCEPT, nil, nil)
+	c.eventChan <- model.NewEvent(model.Accept, nil, nil)
 	for _, opt := range opts {
 		opt(c)
 	}
@@ -42,9 +42,9 @@ func (c *LoggingConn) Read(b []byte) (int, error) {
 	if n > 0 {
 		newBuf := make([]byte, n)
 		copy(newBuf, b[:n])
-		c.eventChan <- model.NewEvent(model.READ, newBuf, err)
+		c.eventChan <- model.NewEvent(model.Read, newBuf, err)
 	} else {
-		c.eventChan <- model.NewEvent(model.READ, nil, err)
+		c.eventChan <- model.NewEvent(model.Read, nil, err)
 	}
 	return n, err
 }
@@ -54,9 +54,9 @@ func (c *LoggingConn) Write(b []byte) (int, error) {
 	if n > 0 {
 		newBuf := make([]byte, n)
 		copy(newBuf, b[:n])
-		c.eventChan <- model.NewEvent(model.WRITE, newBuf, err)
+		c.eventChan <- model.NewEvent(model.Write, newBuf, err)
 	} else {
-		c.eventChan <- model.NewEvent(model.WRITE, nil, err)
+		c.eventChan <- model.NewEvent(model.Write, nil, err)
 	}
 	return n, err
 }
@@ -64,7 +64,7 @@ func (c *LoggingConn) Write(b []byte) (int, error) {
 func (c *LoggingConn) Close() error {
 	err := c.Conn.Close()
 	c.once.Do(func() {
-		c.eventChan <- model.NewEvent(model.CLOSE, nil, err)
+		c.eventChan <- model.NewEvent(model.Close, nil, err)
 		close(c.eventChan)
 		c.logChan <- c.logEntry
 		close(c.logChan)

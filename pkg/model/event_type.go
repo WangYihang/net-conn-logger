@@ -5,21 +5,22 @@ import "fmt"
 type EventType int64
 
 const (
-	ACCEPT EventType = iota
-	READ
-	WRITE
-	CLOSE
+	Undefined EventType = iota
+	Accept
+	Read
+	Write
+	Close
 )
 
 func (e EventType) String() string {
 	switch e {
-	case ACCEPT:
+	case Accept:
 		return "accept"
-	case READ:
+	case Read:
 		return "read"
-	case WRITE:
+	case Write:
 		return "write"
-	case CLOSE:
+	case Close:
 		return "close"
 	default:
 		return "unknown"
