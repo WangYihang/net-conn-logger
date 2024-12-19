@@ -6,10 +6,10 @@ import (
 )
 
 type Event struct {
-	timestamp int64
-	eventType EventType
-	payload   JSONMarshalableByteSlice
-	errString string
+	Timestamp int64
+	EventType EventType
+	Payload   JSONMarshalableByteSlice
+	Error     string
 }
 
 func NewEvent(eventType EventType, payload []byte, err error) *Event {
@@ -18,15 +18,15 @@ func NewEvent(eventType EventType, payload []byte, err error) *Event {
 		errorString = err.Error()
 	}
 	return &Event{
-		timestamp: time.Now().UnixMilli(),
-		eventType: eventType,
-		payload:   payload,
-		errString: errorString,
+		Timestamp: time.Now().UnixMilli(),
+		EventType: eventType,
+		Payload:   payload,
+		Error:     errorString,
 	}
 }
 
 func (e *Event) Type() EventType {
-	return e.eventType
+	return e.EventType
 }
 
 func (e *Event) MarshalJSON() ([]byte, error) {
@@ -36,9 +36,9 @@ func (e *Event) MarshalJSON() ([]byte, error) {
 		Payload   JSONMarshalableByteSlice `json:"payload"`
 		Error     string                   `json:"error"`
 	}{
-		Timestamp: e.timestamp,
-		Type:      e.eventType,
-		Payload:   e.payload,
-		Error:     e.errString,
+		Timestamp: e.Timestamp,
+		Type:      e.EventType,
+		Payload:   e.Payload,
+		Error:     e.Error,
 	})
 }

@@ -7,40 +7,44 @@ import (
 )
 
 type LogEntry struct {
-	timestamp    int64
-	events       []*Event
-	bytesWritten JSONMarshalableByteSlice
-	bytesRead    JSONMarshalableByteSlice
-	localAddr    net.Addr
-	remoteAddr   net.Addr
+	Timestamp       int64
+	Events          []*Event
+	BytesWritten    JSONMarshalableByteSlice
+	NumBytesWritten uint64
+	BytesRead       JSONMarshalableByteSlice
+	NumBytesRead    uint64
+	LocalAddr       net.Addr
+	RemoteAddr      net.Addr
 }
 
 func NewLogEntry(localAddr, remoteAddr net.Addr) *LogEntry {
 	return &LogEntry{
-		timestamp:  time.Now().UnixMilli(),
-		events:     []*Event{},
-		localAddr:  localAddr,
-		remoteAddr: remoteAddr,
+		Timestamp:  time.Now().UnixMilli(),
+		Events:     []*Event{},
+		LocalAddr:  localAddr,
+		RemoteAddr: remoteAddr,
 	}
 }
 
 func (l *LogEntry) AddEvent(event *Event) {
-	l.events = append(l.events, event)
+	l.Events = append(l.Events, event)
 }
 
 func (l *LogEntry) MarshalJSON() ([]byte, error) {
 	bytesWritten := []byte{}
 	bytesRead := []byte{}
-	for _, event := range l.events {
+	for _, event := range l.Events {
 		switch event.Type() {
 		case Write:
-			bytesWritten = append(bytesWritten, event.payload...)
+			bytesWritten = append(bytesWritten, event.Payload...)
+			l.NumBytesWritten += uint64(len(event.Payload))
 		case Read:
-			bytesRead = append(bytesRead, event.payload...)
+			bytesRead = append(bytesRead, event.Payload...)
+			l.NumBytesRead += uint64(len(event.Payload))
 		}
 	}
-	l.bytesWritten = bytesWritten
-	l.bytesRead = bytesRead
+	l.BytesWritten = bytesWritten
+	l.BytesRead = bytesRead
 	return json.Marshal(struct {
 		Timestamp    int64                    `json:"timestamp"`
 		Events       []*Event                 `json:"events"`
@@ -49,11 +53,11 @@ func (l *LogEntry) MarshalJSON() ([]byte, error) {
 		LocalAddr    string                   `json:"local_addr"`
 		RemoteAddr   string                   `json:"remote_addr"`
 	}{
-		Timestamp:    l.timestamp,
-		Events:       l.events,
-		BytesWritten: l.bytesWritten,
-		BytesRead:    l.bytesRead,
-		LocalAddr:    l.localAddr.String(),
-		RemoteAddr:   l.remoteAddr.String(),
+		Timestamp:    l.Timestamp,
+		Events:       l.Events,
+		BytesWritten: l.BytesWritten,
+		BytesRead:    l.BytesRead,
+		LocalAddr:    l.LocalAddr.String(),
+		RemoteAddr:   l.RemoteAddr.String(),
 	})
 }
