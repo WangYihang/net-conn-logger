@@ -64,8 +64,10 @@ func (c *LoggingConn) Write(b []byte) (int, error) {
 func (c *LoggingConn) Close() error {
 	err := c.Conn.Close()
 	c.once.Do(func() {
-		c.logChan <- c.logEntry
 		c.eventChan <- model.NewEvent(model.Close, nil, err)
+		close(c.eventChan)
+		c.logChan <- c.logEntry
+		close(c.logChan)
 	})
 	return err
 }
