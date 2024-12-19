@@ -46,18 +46,22 @@ func (l *LogEntry) MarshalJSON() ([]byte, error) {
 	l.BytesWritten = bytesWritten
 	l.BytesRead = bytesRead
 	return json.Marshal(struct {
-		Timestamp    int64                    `json:"timestamp"`
-		Events       []*Event                 `json:"events"`
-		BytesWritten JSONMarshalableByteSlice `json:"bytes_written"`
-		BytesRead    JSONMarshalableByteSlice `json:"bytes_read"`
-		LocalAddr    string                   `json:"local_addr"`
-		RemoteAddr   string                   `json:"remote_addr"`
+		Timestamp       int64                    `json:"timestamp"`
+		Events          []*Event                 `json:"events"`
+		BytesWritten    JSONMarshalableByteSlice `json:"bytes_written"`
+		NumBytesWritten uint64                   `json:"num_bytes_written"`
+		BytesRead       JSONMarshalableByteSlice `json:"bytes_read"`
+		NumBytesRead    uint64                   `json:"num_bytes_read"`
+		LocalAddr       string                   `json:"local_addr"`
+		RemoteAddr      string                   `json:"remote_addr"`
 	}{
-		Timestamp:    l.Timestamp,
-		Events:       l.Events,
-		BytesWritten: l.BytesWritten,
-		BytesRead:    l.BytesRead,
-		LocalAddr:    l.LocalAddr.String(),
-		RemoteAddr:   l.RemoteAddr.String(),
+		Timestamp:       l.Timestamp,
+		Events:          l.Events,
+		BytesWritten:    l.BytesWritten,
+		NumBytesWritten: l.NumBytesWritten,
+		BytesRead:       l.BytesRead,
+		NumBytesRead:    l.NumBytesRead,
+		LocalAddr:       l.LocalAddr.String(),
+		RemoteAddr:      l.RemoteAddr.String(),
 	})
 }
