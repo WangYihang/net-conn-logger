@@ -1,4 +1,4 @@
-module github.com/WangYihang/go-net-conn-logger
+module github.com/WangYihang/net-conn-logger
 
 go 1.22.0
 

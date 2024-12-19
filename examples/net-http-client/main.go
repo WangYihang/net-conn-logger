@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/WangYihang/go-net-conn-logger/pkg/transport"
+	"github.com/WangYihang/net-conn-logger/pkg/transport"
 )
 
 func main() {

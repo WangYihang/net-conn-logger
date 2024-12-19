@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/WangYihang/go-net-conn-logger/pkg/listener"
+	"github.com/WangYihang/net-conn-logger/pkg/listener"
 	"github.com/gin-gonic/gin"
 )
 

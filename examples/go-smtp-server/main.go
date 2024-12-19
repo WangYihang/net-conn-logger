@@ -9,7 +9,7 @@ import (
 
 	"errors"
 
-	"github.com/WangYihang/go-net-conn-logger/pkg/listener"
+	"github.com/WangYihang/net-conn-logger/pkg/listener"
 	"github.com/emersion/go-sasl"
 	"github.com/emersion/go-smtp"
 )

@@ -4,7 +4,7 @@ import (
 	"net"
 	"sync"
 
-	"github.com/WangYihang/go-net-conn-logger/pkg/model"
+	"github.com/WangYihang/net-conn-logger/pkg/model"
 )
 
 type LoggingConn struct {
