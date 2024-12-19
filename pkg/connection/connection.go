@@ -66,8 +66,6 @@ func (c *LoggingConn) Close() error {
 	c.once.Do(func() {
 		c.logChan <- c.logEntry
 		c.eventChan <- model.NewEvent(model.Close, nil, err)
-		close(c.logChan)
-		close(c.eventChan)
 	})
 	return err
 }
