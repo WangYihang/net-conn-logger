@@ -28,6 +28,8 @@ func NewLogEntry(localAddr, remoteAddr net.Addr) *LogEntry {
 
 func (l *LogEntry) AddEvent(event *Event) {
 	l.Events = append(l.Events, event)
+	l.NumBytesWritten += uint64(len(event.Payload))
+	l.NumBytesRead += uint64(len(event.Payload))
 }
 
 func (l *LogEntry) MarshalJSON() ([]byte, error) {
@@ -37,10 +39,8 @@ func (l *LogEntry) MarshalJSON() ([]byte, error) {
 		switch event.Type() {
 		case Write:
 			bytesWritten = append(bytesWritten, event.Payload...)
-			l.NumBytesWritten += uint64(len(event.Payload))
 		case Read:
 			bytesRead = append(bytesRead, event.Payload...)
-			l.NumBytesRead += uint64(len(event.Payload))
 		}
 	}
 	l.BytesWritten = bytesWritten
